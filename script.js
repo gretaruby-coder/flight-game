@@ -178,42 +178,25 @@ resizeCanvas();
    PLANE SELECTION
 --------------------------- */
 
-document
-    .querySelectorAll(".planeChoice")
-    .forEach(button => {
+const planeChoices = document.querySelectorAll(".planeChoice");
 
-        button.addEventListener(
-            "click",
-            function() {
+planeChoices.forEach((button) => {
 
-                selectedPlane =
-                    this.dataset.plane;
+    button.addEventListener("click", () => {
 
+        // Change selected aircraft
+        selectedPlane = button.dataset.plane;
 
-                document
-                    .querySelectorAll(
-                        ".planeChoice"
-                    )
-                    .forEach(choice => {
+        // Remove selection from every plane
+        planeChoices.forEach((choice) => {
+            choice.classList.remove("selected");
+        });
 
-                        choice.classList
-                            .remove(
-                                "selected"
-                            );
+        // Highlight clicked plane
+        button.classList.add("selected");
 
-                    });
-
-
-                this.classList
-                    .add(
-                        "selected"
-                    );
-
-            }
-        );
-
+        console.log("Selected plane:", selectedPlane);
     });
-
 
 
 /* ---------------------------
