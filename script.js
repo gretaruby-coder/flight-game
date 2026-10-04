@@ -1,717 +1,337 @@
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-const message = document.getElementById("message");
-
-let width;
-let height;
-
-let gameRunning = false;
-let crashed = false;
-
-const keys = {};
-
-let selectedPlane = "emirates";
-
-const planes = {
-    emirates: {
-        name: "Emirates",
-        color: "#d71920",
-        accent: "#ffffff"
-    },
-
-    wizzair: {
-        name: "Wizz Air",
-        color: "#c6007e",
-        accent: "#ffffff"
-    },
-
-    britishairways: {
-        name: "British Airways",
-        color: "#003b7a",
-        accent: "#e31837"
-    }
-};
-
-
-const player = {
-    x: 0,
-    y: 0,
-    width: 55,
-    height: 75,
-    speed: 5
-};
-
-
-let clouds = [];
-let cloudTimer = 0;
-
-
-// -----------------------------------
-// CANVAS
-// -----------------------------------
-
-function resizeCanvas() {
-
-    width = canvas.clientWidth;
-    height = canvas.clientHeight;
-
-    canvas.width = width;
-    canvas.height = height;
-
-    if (!gameRunning) {
-
-        player.x = width / 2;
-        player.y = height - 120;
-
-    }
+* {
+    box-sizing: border-box;
 }
 
-window.addEventListener("resize", resizeCanvas);
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 
-resizeCanvas();
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-
-// -----------------------------------
-// KEYBOARD
-// -----------------------------------
-
-document.addEventListener("keydown", function(event) {
-
-    keys[event.key.toLowerCase()] = true;
-
-    if (
-        event.key === "ArrowUp" ||
-        event.key === "ArrowDown" ||
-        event.key === "ArrowLeft" ||
-        event.key === "ArrowRight"
-    ) {
-        event.preventDefault();
-    }
-
-});
-
-document.addEventListener("keyup", function(event) {
-
-    keys[event.key.toLowerCase()] = false;
-
-});
-
-
-// -----------------------------------
-// PLANE SELECTION
-// -----------------------------------
-
-function selectPlane(type) {
-
-    selectedPlane = type;
-
-    document.querySelectorAll(".planeChoice").forEach(button => {
-
-        button.classList.remove("selected");
-
-    });
-
-    const selected = document.querySelector(
-        `[data-plane="${type}"]`
-    );
-
-    if (selected) {
-        selected.classList.add("selected");
-    }
-
+    background: #071525;
 }
 
 
-// -----------------------------------
-// START GAME
-// -----------------------------------
+/* GAME */
 
-function startGame() {
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    gameRunning = true;
-    crashed = false;
+#gameContainer {
 
-    player.x = width / 2;
-    player.y = height - 120;
+    position: relative;
 
-    clouds = [];
-    cloudTimer = 0;
+    width: 100vw;
+    height: 100vh;
 
-    message.classList.add("hidden");
+    max-width: 1100px;
+    max-height: 750px;
 
-    requestAnimationFrame(gameLoop);
+    overflow: hidden;
 
+    background: #62c8f5;
 }
 
 
-// -----------------------------------
-// CRASH
-// -----------------------------------
+/* CANVAS */
 
-function crash() {
+#gameCanvas {
 
-    gameRunning = false;
-    crashed = true;
+    position: absolute;
 
-    message.innerHTML = `
+    width: 100%;
+    height: 100%;
 
-        <h1>💥 CRASH!</h1>
-
-        <p>
-            Your ${planes[selectedPlane].name} crashed!
-        </p>
-
-        <button id="restartButton">
-            FLY AGAIN
-        </button>
-
-    `;
-
-    message.classList.remove("hidden");
-
-    document
-        .getElementById("restartButton")
-        .addEventListener("click", startGame);
-
+    top: 0;
+    left: 0;
 }
 
 
-// -----------------------------------
-// PLAYER MOVEMENT
-// -----------------------------------
+/* SCREENS */
 
-function movePlayer() {
+.screen {
 
-    if (
-        keys["arrowleft"] ||
-        keys["a"]
-    ) {
+    position: absolute;
 
-        player.x -= player.speed;
+    inset: 0;
 
-    }
+    z-index: 10;
 
-    if (
-        keys["arrowright"] ||
-        keys["d"]
-    ) {
+    display: flex;
 
-        player.x += player.speed;
+    flex-direction: column;
 
-    }
+    align-items: center;
+    justify-content: center;
 
-    if (
-        keys["arrowup"] ||
-        keys["w"]
-    ) {
+    text-align: center;
 
-        player.y -= player.speed;
+    color: white;
 
-    }
+    padding: 30px;
 
-    if (
-        keys["arrowdown"] ||
-        keys["s"]
-    ) {
-
-        player.y += player.speed;
-
-    }
-
-
-    // Keep plane on screen
-
-    player.x = Math.max(
-        player.width / 2,
-        Math.min(
-            width - player.width / 2,
-            player.x
-        )
-    );
-
-
-    player.y = Math.max(
-        player.height / 2,
-        Math.min(
-            height - player.height / 2,
-            player.y
-        )
-    );
-
-}
-
-
-// -----------------------------------
-// CREATE CLOUD
-// -----------------------------------
-
-function createCloud() {
-
-    clouds.push({
-
-        x: 40 + Math.random() * (width - 80),
-
-        y: -100,
-
-        width: 90 + Math.random() * 80,
-
-        height: 50 + Math.random() * 30,
-
-        speed: 2 + Math.random() * 2
-
-    });
-
-}
-
-
-// -----------------------------------
-// COLLISION
-// -----------------------------------
-
-function checkCollision(a, b) {
-
-    return (
-
-        Math.abs(a.x - b.x) <
-        (a.width + b.width) / 2
-
-        &&
-
-        Math.abs(a.y - b.y) <
-        (a.height + b.height) / 2
-
-    );
-
-}
-
-
-// -----------------------------------
-// UPDATE
-// -----------------------------------
-
-function update() {
-
-    movePlayer();
-
-
-    // Create clouds
-
-    cloudTimer--;
-
-    if (cloudTimer <= 0) {
-
-        createCloud();
-
-        cloudTimer =
-            70 + Math.random() * 70;
-
-    }
-
-
-    // Move clouds
-
-    clouds.forEach(cloud => {
-
-        cloud.y += cloud.speed;
-
-    });
-
-
-    // Check collision
-
-    for (const cloud of clouds) {
-
-        if (checkCollision(player, cloud)) {
-
-            crash();
-
-            return;
-
-        }
-
-    }
-
-
-    // Remove old clouds
-
-    clouds = clouds.filter(
-        cloud => cloud.y < height + 150
-    );
-
-}
-
-
-// -----------------------------------
-// DRAW SKY
-// -----------------------------------
-
-function drawBackground() {
-
-    const gradient =
-        ctx.createLinearGradient(
-            0,
-            0,
-            0,
-            height
+    background:
+        linear-gradient(
+            rgba(5, 24, 45, 0.45),
+            rgba(5, 24, 45, 0.65)
         );
-
-    gradient.addColorStop(
-        0,
-        "#38bdf8"
-    );
-
-    gradient.addColorStop(
-        1,
-        "#dff6ff"
-    );
-
-    ctx.fillStyle = gradient;
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    // Sun
-
-    ctx.fillStyle = "#fff3a3";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        width - 100,
-        100,
-        45,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
 }
 
 
-// -----------------------------------
-// DRAW CLOUD
-// -----------------------------------
-
-function drawCloud(cloud) {
-
-    ctx.fillStyle =
-        "rgba(255,255,255,0.85)";
-
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        cloud.x,
-        cloud.y,
-        cloud.width / 2,
-        cloud.height / 2,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cloud.x - 30,
-        cloud.y - 10,
-        25,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.arc(
-        cloud.x + 5,
-        cloud.y - 20,
-        35,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.arc(
-        cloud.x + 35,
-        cloud.y - 5,
-        25,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
+.hidden {
+    display: none !important;
 }
 
 
-// -----------------------------------
-// DRAW AIRPLANE
-// -----------------------------------
+/* TITLE */
 
-function drawPlane() {
+h1 {
 
-    const plane =
-        planes[selectedPlane];
+    margin: 0 0 10px;
 
-    ctx.save();
-
-    ctx.translate(
-        player.x,
-        player.y
+    font-size: clamp(
+        40px,
+        7vw,
+        75px
     );
 
-
-    // Main body
-
-    ctx.fillStyle =
-        plane.color;
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        0,
-        0,
-        11,
-        38,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
+    text-shadow:
+        0 4px 12px
+        rgba(0,0,0,.4);
+}
 
 
-    // Nose
+.subtitle {
 
-    ctx.beginPath();
+    font-size: 21px;
 
-    ctx.moveTo(0, -45);
-
-    ctx.lineTo(12, -15);
-
-    ctx.lineTo(-12, -15);
-
-    ctx.closePath();
-
-    ctx.fill();
+    margin-bottom: 28px;
+}
 
 
-    // Wings
+/* PLANE SELECTION */
 
-    ctx.fillStyle =
-        plane.color;
+#planeChoices {
 
-    ctx.beginPath();
+    display: flex;
 
-    ctx.moveTo(-7, -5);
+    justify-content: center;
 
-    ctx.lineTo(-42, 20);
+    gap: 18px;
 
-    ctx.lineTo(-38, 28);
+    width: 100%;
 
-    ctx.lineTo(-5, 17);
+    margin-bottom: 30px;
 
-    ctx.closePath();
-
-    ctx.fill();
+    flex-wrap: wrap;
+}
 
 
-    ctx.beginPath();
+.planeChoice {
 
-    ctx.moveTo(7, -5);
+    width: 190px;
+    height: 150px;
 
-    ctx.lineTo(42, 20);
+    border-radius: 18px;
 
-    ctx.lineTo(38, 28);
+    border: 3px solid
+        rgba(255,255,255,.4);
 
-    ctx.lineTo(5, 17);
+    background:
+        rgba(255,255,255,.15);
 
-    ctx.closePath();
+    color: white;
 
-    ctx.fill();
+    cursor: pointer;
 
+    display: flex;
 
-    // Tail
+    flex-direction: column;
 
-    ctx.beginPath();
+    align-items: center;
+    justify-content: center;
 
-    ctx.moveTo(0, 25);
+    transition: .2s;
 
-    ctx.lineTo(-15, 38);
-
-    ctx.lineTo(-8, 42);
-
-    ctx.lineTo(0, 32);
-
-    ctx.lineTo(8, 42);
-
-    ctx.lineTo(15, 38);
-
-    ctx.closePath();
-
-    ctx.fill();
+    backdrop-filter:
+        blur(8px);
+}
 
 
-    // Windows
+.planeChoice:hover {
 
-    ctx.fillStyle =
-        "#bde9ff";
+    transform:
+        translateY(-5px);
 
-    for (
-        let y = -10;
-        y <= 17;
-        y += 9
-    ) {
+    background:
+        rgba(255,255,255,.25);
+}
 
-        ctx.beginPath();
 
-        ctx.arc(
-            0,
-            y,
-            2.5,
-            0,
-            Math.PI * 2
-        );
+.planeChoice.selected {
 
-        ctx.fill();
+    border:
+        4px solid #ffd84d;
+
+    background:
+        rgba(255,216,77,.22);
+
+    transform:
+        translateY(-7px);
+
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.3);
+}
+
+
+.planeIcon {
+
+    font-size: 48px;
+
+    margin-bottom: 10px;
+}
+
+
+.planeChoice strong {
+
+    font-size: 18px;
+}
+
+
+.planeChoice small {
+
+    margin-top: 5px;
+
+    opacity: .75;
+}
+
+
+/* BUTTON */
+
+#startButton,
+#menuButton {
+
+    border: none;
+
+    padding:
+        16px 38px;
+
+    border-radius:
+        50px;
+
+    background:
+        #ffd43b;
+
+    color:
+        #16263a;
+
+    font-size:
+        18px;
+
+    font-weight:
+        bold;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 6px 0
+        #b99000;
+}
+
+
+#startButton:hover,
+#menuButton:hover {
+
+    transform:
+        translateY(-2px);
+}
+
+
+#startButton:active,
+#menuButton:active {
+
+    transform:
+        translateY(4px);
+
+    box-shadow:
+        0 2px 0
+        #b99000;
+}
+
+
+.controls {
+
+    margin-top: 22px;
+
+    font-size: 14px;
+
+    opacity: .8;
+}
+
+
+/* HUD */
+
+#hud {
+
+    position: absolute;
+
+    z-index: 5;
+
+    top: 20px;
+    left: 25px;
+    right: 25px;
+
+    display: none;
+
+    justify-content:
+        space-between;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    text-shadow:
+        0 2px 5px
+        rgba(0,0,0,.6);
+
+    pointer-events: none;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+
+    .planeChoice {
+
+        width: 120px;
+        height: 120px;
 
     }
 
+    .planeIcon {
 
-    // Airline accent
-
-    ctx.fillStyle =
-        plane.accent;
-
-    ctx.fillRect(
-        -10,
-        -2,
-        20,
-        5
-    );
-
-
-    ctx.restore();
-
-}
-
-
-// -----------------------------------
-// DRAW
-// -----------------------------------
-
-function draw() {
-
-    drawBackground();
-
-    clouds.forEach(drawCloud);
-
-    drawPlane();
-
-}
-
-
-// -----------------------------------
-// GAME LOOP
-// -----------------------------------
-
-function gameLoop() {
-
-    if (!gameRunning) {
-
-        draw();
-
-        return;
+        font-size: 35px;
 
     }
 
+    .planeChoice strong {
 
-    update();
+        font-size: 14px;
 
-    draw();
-
-
-    requestAnimationFrame(
-        gameLoop
-    );
+    }
 
 }
-
-
-// -----------------------------------
-// PLANE CHOOSER
-// -----------------------------------
-
-function createPlaneSelector() {
-
-    const selector =
-        document.createElement("div");
-
-    selector.id = "planeSelector";
-
-    selector.innerHTML = `
-
-        <div class="planeChoice selected"
-             data-plane="emirates">
-
-            <strong>🇦🇪 Emirates</strong>
-
-        </div>
-
-        <div class="planeChoice"
-             data-plane="wizzair">
-
-            <strong>💜 Wizz Air</strong>
-
-        </div>
-
-        <div class="planeChoice"
-             data-plane="britishairways">
-
-            <strong>🇬🇧 British Airways</strong>
-
-        </div>
-
-    `;
-
-
-    message.insertBefore(
-        selector,
-        message.querySelector("button")
-    );
-
-
-    selector
-        .querySelectorAll(".planeChoice")
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    selectPlane(
-                        button.dataset.plane
-                    );
-
-                }
-            );
-
-        });
-
-}
-
-document.getElementById("startBtn").addEventListener("click", startGame);
-
-createPlaneSelector();
-
-
-// Initial drawing
-
-draw();
