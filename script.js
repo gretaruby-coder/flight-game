@@ -1,74 +1,26 @@
-const canvas =
-    document.getElementById("gameCanvas");
+// ============================================
+// AIRLINE PILOT
+// ============================================
 
-const ctx =
-    canvas.getContext("2d");
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
+const mainMenu = document.getElementById("mainMenu");
+const crashScreen = document.getElementById("crashScreen");
+const startButton = document.getElementById("startButton");
+const menuButton = document.getElementById("menuButton");
 
-const mainMenu =
-    document.getElementById("mainMenu");
-
-const crashScreen =
-    document.getElementById("crashScreen");
-
-const startButton =
-    document.getElementById("startButton");
-
-const menuButton =
-    document.getElementById("menuButton");
-
-const hud =
-    document.getElementById("hud");
-
-const distanceDisplay =
-    document.getElementById("distance");
-
-const finalDistance =
-    document.getElementById("finalDistance");
-
-const airlineName =
-    document.getElementById("airlineName");
-
-const crashMessage =
-    document.getElementById("crashMessage");
+const hud = document.getElementById("hud");
+const airlineName = document.getElementById("airlineName");
+const distanceDisplay = document.getElementById("distance");
+const finalDistance = document.getElementById("finalDistance");
+const crashMessage = document.getElementById("crashMessage");
 
 
+// ============================================
+// AIRLINES
+// ============================================
 
-/* ---------------------------
-   GAME VARIABLES
---------------------------- */
-
-let width;
-let height;
-
-let gameRunning = false;
-
-let selectedPlane = "emirates";
-
-let distance = 0;
-
-let clouds = [];
-
-let traffic = [];
-
-let cloudTimer = 0;
-
-let trafficTimer = 0;
-
-let lastTime = 0;
-
-
-const keys = {};
-
-
-
-/* ---------------------------
-   AIRLINES
---------------------------- */
-
-const airlines = {
-
-    emirates: {
 const airlines = {
 
     emirates: {
@@ -95,146 +47,161 @@ const airlines = {
 };
 
 
+// ============================================
+// GAME VARIABLES
+// ============================================
 
-/* ---------------------------
-   PLAYER
---------------------------- */
+let selectedPlane = "emirates";
+
+let gameRunning = false;
+
+let distance = 0;
+
+let clouds = [];
+
+let traffic = [];
+
+let cloudTimer = 0;
+
+let trafficTimer = 0;
+
+let lastTime = 0;
+
+let width = 0;
+
+let height = 0;
+
+const keys = {};
+
+
+// ============================================
+// PLAYER
+// ============================================
 
 const player = {
 
     x: 0,
-
     y: 0,
 
-    width: 55,
-
-    height: 80,
+    width: 50,
+    height: 75,
 
     speed: 350
 
 };
 
 
-
-/* ---------------------------
-   RESIZE CANVAS
---------------------------- */
+// ============================================
+// CANVAS SIZE
+// ============================================
 
 function resizeCanvas() {
 
-    width =
-        canvas.clientWidth;
+    width = window.innerWidth;
+    height = window.innerHeight;
 
-    height =
-        canvas.clientHeight;
-
-
-    canvas.width =
-        width;
-
-    canvas.height =
-        height;
-
+    canvas.width = width;
+    canvas.height = height;
 
     if (!gameRunning) {
 
-        player.x =
-            width / 2;
-
-        player.y =
-            height - 120;
+        player.x = width / 2;
+        player.y = height - 120;
 
     }
 
 }
 
-
-window.addEventListener(
-    "resize",
-    resizeCanvas
-);
-
+window.addEventListener("resize", resizeCanvas);
 
 resizeCanvas();
 
 
+// ============================================
+// PLANE SELECTION
+// ============================================
 
-/* ---------------------------
-   PLANE SELECTION
---------------------------- */
+const planeButtons =
+    document.querySelectorAll(".planeChoice");
 
-const planeChoices = document.querySelectorAll(".planeChoice");
 
-planeChoices.forEach((button) => {
+planeButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", function () {
 
-        // Change selected aircraft
-        selectedPlane = button.dataset.plane;
+        selectedPlane =
+            this.getAttribute("data-plane");
 
-        // Remove selection from every plane
-        planeChoices.forEach((choice) => {
-            choice.classList.remove("selected");
+
+        planeButtons.forEach(otherButton => {
+
+            otherButton.classList.remove("selected");
+
         });
 
-        // Highlight clicked plane
-        button.classList.add("selected");
 
-        console.log("Selected plane:", selectedPlane);
+        this.classList.add("selected");
+
     });
 
 });
 
 
-/* ---------------------------
-   KEYBOARD
---------------------------- */
+// ============================================
+// START BUTTON
+// ============================================
 
-document.addEventListener(
-    "keydown",
-    function(event) {
+startButton.addEventListener("click", function () {
 
-        keys[
-            event.key.toLowerCase()
-        ] = true;
+    startGame();
+
+});
 
 
-        if (
-            event.key.startsWith(
-                "Arrow"
-            )
-        ) {
+// ============================================
+// MAIN MENU BUTTON
+// ============================================
 
-            event.preventDefault();
+menuButton.addEventListener("click", function () {
 
-        }
+    returnToMenu();
+
+});
+
+
+// ============================================
+// KEYBOARD
+// ============================================
+
+document.addEventListener("keydown", function (event) {
+
+    keys[event.key.toLowerCase()] = true;
+
+
+    if (
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown" ||
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowRight"
+    ) {
+
+        event.preventDefault();
 
     }
-);
+
+});
 
 
-document.addEventListener(
-    "keyup",
-    function(event) {
+document.addEventListener("keyup", function (event) {
 
-        keys[
-            event.key.toLowerCase()
-        ] = false;
+    keys[event.key.toLowerCase()] = false;
 
-    }
-);
+});
 
 
-
-/* ---------------------------
-   START GAME
---------------------------- */
-
-startButton.addEventListener(
-    "click",
-    startGame
-);
-
+// ============================================
+// START GAME
+// ============================================
 
 function startGame() {
 
@@ -248,78 +215,55 @@ function startGame() {
 
     cloudTimer = 0;
 
-    trafficTimer = 2;
+    trafficTimer = 1.5;
 
 
-    player.x =
-        width / 2;
+    player.x = width / 2;
 
-    player.y =
-        height - 110;
+    player.y = height - 120;
 
 
-    mainMenu.classList
-        .add("hidden");
+    mainMenu.classList.add("hidden");
 
-    crashScreen.classList
-        .add("hidden");
+    crashScreen.classList.add("hidden");
 
 
-    hud.style.display =
-        "flex";
+    hud.style.display = "flex";
 
 
     airlineName.textContent =
-        "✈️ " +
-        airlines[selectedPlane].name;
+        "✈ " + airlines[selectedPlane].name;
 
 
-    distanceDisplay.textContent =
-        "0";
+    distanceDisplay.textContent = "0";
 
 
-    lastTime =
-        performance.now();
+    lastTime = performance.now();
 
 
-    requestAnimationFrame(
-        gameLoop
-    );
+    requestAnimationFrame(gameLoop);
 
 }
 
 
-
-/* ---------------------------
-   MAIN MENU
---------------------------- */
-
-menuButton.addEventListener(
-    "click",
-    returnToMenu
-);
-
+// ============================================
+// RETURN TO MENU
+// ============================================
 
 function returnToMenu() {
 
     gameRunning = false;
 
-
-    crashScreen.classList
-        .add("hidden");
-
-
-    mainMenu.classList
-        .remove("hidden");
-
-
-    hud.style.display =
-        "none";
-
-
     clouds = [];
 
     traffic = [];
+
+
+    crashScreen.classList.add("hidden");
+
+    mainMenu.classList.remove("hidden");
+
+    hud.style.display = "none";
 
 
     drawBackground();
@@ -327,15 +271,13 @@ function returnToMenu() {
 }
 
 
-
-/* ---------------------------
-   PLAYER MOVEMENT
---------------------------- */
+// ============================================
+// PLAYER MOVEMENT
+// ============================================
 
 function movePlayer(dt) {
 
     let dx = 0;
-
     let dy = 0;
 
 
@@ -379,32 +321,31 @@ function movePlayer(dt) {
     }
 
 
+    // Prevent diagonal movement being faster
+
     if (dx !== 0 && dy !== 0) {
 
         dx *= 0.707;
-
         dy *= 0.707;
 
     }
 
 
     player.x +=
-        dx *
-        player.speed *
-        dt;
+        dx * player.speed * dt;
 
 
     player.y +=
-        dy *
-        player.speed *
-        dt;
+        dy * player.speed * dt;
 
+
+    // Keep aircraft inside screen
 
     player.x =
         Math.max(
-            35,
+            40,
             Math.min(
-                width - 35,
+                width - 40,
                 player.x
             )
         );
@@ -412,9 +353,9 @@ function movePlayer(dt) {
 
     player.y =
         Math.max(
-            50,
+            55,
             Math.min(
-                height - 50,
+                height - 55,
                 player.y
             )
         );
@@ -422,16 +363,14 @@ function movePlayer(dt) {
 }
 
 
-
-/* ---------------------------
-   CREATE CLOUD
---------------------------- */
+// ============================================
+// CREATE CLOUD
+// ============================================
 
 function createCloud() {
 
     const size =
-        45 +
-        Math.random() * 45;
+        50 + Math.random() * 50;
 
 
     clouds.push({
@@ -439,19 +378,19 @@ function createCloud() {
         x:
             size +
             Math.random() *
-            (width - size * 2),
+            Math.max(
+                1,
+                width - size * 2
+            ),
 
-        y:
-            -100,
+        y: -100,
 
-        width:
-            size * 1.8,
+        width: size * 1.8,
 
-        height:
-            size,
+        height: size,
 
         speed:
-            110 +
+            100 +
             Math.random() * 80
 
     });
@@ -459,25 +398,19 @@ function createCloud() {
 }
 
 
-
-/* ---------------------------
-   CREATE TRAFFIC PLANE
---------------------------- */
+// ============================================
+// CREATE OTHER AIRCRAFT
+// ============================================
 
 function createTrafficPlane() {
 
     const colours = [
 
-        "#ef4444",
-
+        "#e63946",
         "#2563eb",
-
         "#f97316",
-
-        "#7c3aed",
-
         "#16a34a",
-
+        "#7c3aed",
         "#475569"
 
     ];
@@ -486,18 +419,18 @@ function createTrafficPlane() {
     traffic.push({
 
         x:
-            45 +
+            50 +
             Math.random() *
-            (width - 90),
+            Math.max(
+                1,
+                width - 100
+            ),
 
-        y:
-            -100,
+        y: -100,
 
-        width:
-            52,
+        width: 50,
 
-        height:
-            75,
+        height: 75,
 
         speed:
             150 +
@@ -516,41 +449,24 @@ function createTrafficPlane() {
 }
 
 
+// ============================================
+// COLLISION
+// ============================================
 
-/* ---------------------------
-   COLLISION
---------------------------- */
-
-function collision(
-    a,
-    b,
-    padding = 10
-) {
+function collision(a, b, padding = 10) {
 
     return (
 
-        Math.abs(
-            a.x - b.x
-        )
+        Math.abs(a.x - b.x)
         <
-        (
-            a.width +
-            b.width
-        ) / 2
+        (a.width + b.width) / 2
         - padding
-
 
         &&
 
-
-        Math.abs(
-            a.y - b.y
-        )
+        Math.abs(a.y - b.y)
         <
-        (
-            a.height +
-            b.height
-        ) / 2
+        (a.height + b.height) / 2
         - padding
 
     );
@@ -558,54 +474,54 @@ function collision(
 }
 
 
+// ============================================
+// CRASH
+// ============================================
 
-/* ---------------------------
-   CRASH
---------------------------- */
+function crash(message) {
 
-function crash(reason) {
+    if (!gameRunning) {
+        return;
+    }
+
 
     gameRunning = false;
 
 
-    hud.style.display =
-        "none";
+    hud.style.display = "none";
+
+
+    crashMessage.textContent = message;
 
 
     finalDistance.textContent =
         Math.floor(distance);
 
 
-    crashMessage.textContent =
-        reason;
-
-
-    crashScreen.classList
-        .remove("hidden");
+    crashScreen.classList.remove("hidden");
 
 }
 
 
-
-/* ---------------------------
-   UPDATE GAME
---------------------------- */
+// ============================================
+// UPDATE GAME
+// ============================================
 
 function update(dt) {
 
     movePlayer(dt);
 
 
-    distance +=
-        dt * 12;
+    distance += dt * 12;
 
 
     distanceDisplay.textContent =
         Math.floor(distance);
 
 
-
-    /* CLOUD TIMER */
+    // ----------------
+    // CLOUDS
+    // ----------------
 
     cloudTimer -= dt;
 
@@ -615,14 +531,23 @@ function update(dt) {
         createCloud();
 
         cloudTimer =
-            0.9 +
-            Math.random() * 1.1;
+            1 +
+            Math.random() * 1.2;
 
     }
 
 
+    clouds.forEach(cloud => {
 
-    /* PLANE TIMER */
+        cloud.y +=
+            cloud.speed * dt;
+
+    });
+
+
+    // ----------------
+    // OTHER PLANES
+    // ----------------
 
     trafficTimer -= dt;
 
@@ -632,50 +557,31 @@ function update(dt) {
         createTrafficPlane();
 
         trafficTimer =
-            1.6 +
-            Math.random() * 1.8;
+            1.5 +
+            Math.random() * 2;
 
     }
 
 
+    traffic.forEach(plane => {
 
-    /* MOVE CLOUDS */
+        plane.y +=
+            plane.speed * dt;
 
-    clouds.forEach(
-        cloud => {
-
-            cloud.y +=
-                cloud.speed * dt;
-
-        }
-    );
+    });
 
 
+    // ----------------
+    // CLOUD COLLISION
+    // ----------------
 
-    /* MOVE PLANES */
-
-    traffic.forEach(
-        plane => {
-
-            plane.y +=
-                plane.speed * dt;
-
-        }
-    );
-
-
-
-    /* CLOUD COLLISION */
-
-    for (
-        const cloud of clouds
-    ) {
+    for (const cloud of clouds) {
 
         if (
             collision(
                 player,
                 cloud,
-                18
+                20
             )
         ) {
 
@@ -690,12 +596,11 @@ function update(dt) {
     }
 
 
+    // ----------------
+    // AIRCRAFT COLLISION
+    // ----------------
 
-    /* PLANE COLLISION */
-
-    for (
-        const plane of traffic
-    ) {
+    for (const plane of traffic) {
 
         if (
             collision(
@@ -716,8 +621,7 @@ function update(dt) {
     }
 
 
-
-    /* REMOVE OLD OBJECTS */
+    // Remove things that passed the player
 
     clouds =
         clouds.filter(
@@ -737,10 +641,9 @@ function update(dt) {
 }
 
 
-
-/* ---------------------------
-   SKY
---------------------------- */
+// ============================================
+// BACKGROUND
+// ============================================
 
 function drawBackground() {
 
@@ -755,18 +658,17 @@ function drawBackground() {
 
     gradient.addColorStop(
         0,
-        "#38bdf8"
+        "#3eb8ee"
     );
 
 
     gradient.addColorStop(
         1,
-        "#dff6ff"
+        "#d9f5ff"
     );
 
 
-    ctx.fillStyle =
-        gradient;
+    ctx.fillStyle = gradient;
 
 
     ctx.fillRect(
@@ -777,11 +679,10 @@ function drawBackground() {
     );
 
 
-
-    /* SUN */
+    // Sun
 
     ctx.fillStyle =
-        "#fff1a8";
+        "rgba(255,245,170,.9)";
 
 
     ctx.beginPath();
@@ -789,8 +690,8 @@ function drawBackground() {
 
     ctx.arc(
         width - 100,
-        90,
-        42,
+        100,
+        45,
         0,
         Math.PI * 2
     );
@@ -801,10 +702,9 @@ function drawBackground() {
 }
 
 
-
-/* ---------------------------
-   CLOUD
---------------------------- */
+// ============================================
+// DRAW CLOUD
+// ============================================
 
 function drawCloud(cloud) {
 
@@ -812,7 +712,7 @@ function drawCloud(cloud) {
 
 
     ctx.fillStyle =
-        "rgba(255,255,255,.9)";
+        "rgba(255,255,255,.92)";
 
 
     ctx.beginPath();
@@ -821,9 +721,12 @@ function drawCloud(cloud) {
     ctx.ellipse(
         cloud.x,
         cloud.y,
+
         cloud.width / 2,
-        cloud.height / 2.4,
+        cloud.height / 2.5,
+
         0,
+
         0,
         Math.PI * 2
     );
@@ -832,13 +735,12 @@ function drawCloud(cloud) {
     ctx.fill();
 
 
-
     ctx.beginPath();
 
 
     ctx.arc(
         cloud.x - 30,
-        cloud.y - 10,
+        cloud.y - 8,
         25,
         0,
         Math.PI * 2
@@ -846,9 +748,9 @@ function drawCloud(cloud) {
 
 
     ctx.arc(
-        cloud.x + 5,
+        cloud.x + 3,
         cloud.y - 22,
-        34,
+        35,
         0,
         Math.PI * 2
     );
@@ -856,8 +758,8 @@ function drawCloud(cloud) {
 
     ctx.arc(
         cloud.x + 35,
-        cloud.y - 5,
-        24,
+        cloud.y - 6,
+        26,
         0,
         Math.PI * 2
     );
@@ -871,107 +773,64 @@ function drawCloud(cloud) {
 }
 
 
-
-/* ---------------------------
-   DRAW AIRCRAFT
---------------------------- */
+// ============================================
+// DRAW AIRCRAFT
+// ============================================
 
 function drawAircraft(
     x,
     y,
-    bodyColour,
-    tailColour,
-    stripeColour
+    body,
+    tail,
+    stripe,
+    scale = 1
 ) {
 
     ctx.save();
 
 
-    ctx.translate(
-        x,
-        y
-    );
+    ctx.translate(x, y);
+
+    ctx.scale(scale, scale);
 
 
+    // Wings
 
-    /* WINGS */
+    ctx.fillStyle = body;
 
-    ctx.fillStyle =
-        bodyColour;
+    ctx.strokeStyle = "#7b8791";
 
-
-    ctx.strokeStyle =
-        "#5b6570";
-
-
-    ctx.lineWidth =
-        2;
+    ctx.lineWidth = 1.5;
 
 
     ctx.beginPath();
 
+    ctx.moveTo(-7, -5);
 
-    ctx.moveTo(
-        -7,
-        -5
-    );
+    ctx.lineTo(-42, 20);
 
+    ctx.lineTo(-38, 27);
 
-    ctx.lineTo(
-        -42,
-        20
-    );
+    ctx.lineTo(-6, 15);
 
+    ctx.lineTo(6, 15);
 
-    ctx.lineTo(
-        -38,
-        28
-    );
+    ctx.lineTo(38, 27);
 
+    ctx.lineTo(42, 20);
 
-    ctx.lineTo(
-        -6,
-        15
-    );
-
-
-    ctx.lineTo(
-        6,
-        15
-    );
-
-
-    ctx.lineTo(
-        38,
-        28
-    );
-
-
-    ctx.lineTo(
-        42,
-        20
-    );
-
-
-    ctx.lineTo(
-        7,
-        -5
-    );
-
+    ctx.lineTo(7, -5);
 
     ctx.closePath();
-
 
     ctx.fill();
 
     ctx.stroke();
 
 
+    // Fuselage
 
-    /* BODY */
-
-    ctx.fillStyle =
-        bodyColour;
+    ctx.fillStyle = body;
 
 
     ctx.beginPath();
@@ -993,110 +852,63 @@ function drawAircraft(
     ctx.stroke();
 
 
-
-    /* NOSE */
+    // Nose
 
     ctx.beginPath();
 
+    ctx.moveTo(0, -48);
 
-    ctx.moveTo(
-        0,
-        -47
-    );
+    ctx.lineTo(10, -20);
 
-
-    ctx.lineTo(
-        10,
-        -20
-    );
-
-
-    ctx.lineTo(
-        -10,
-        -20
-    );
-
+    ctx.lineTo(-10, -20);
 
     ctx.closePath();
-
 
     ctx.fill();
 
     ctx.stroke();
 
 
+    // Tail
 
-    /* TAIL */
-
-    ctx.fillStyle =
-        tailColour;
+    ctx.fillStyle = tail;
 
 
     ctx.beginPath();
 
+    ctx.moveTo(0, 25);
 
-    ctx.moveTo(
-        0,
-        25
-    );
+    ctx.lineTo(-16, 40);
 
+    ctx.lineTo(-8, 43);
 
-    ctx.lineTo(
-        -16,
-        40
-    );
+    ctx.lineTo(0, 34);
 
+    ctx.lineTo(8, 43);
 
-    ctx.lineTo(
-        -8,
-        43
-    );
-
-
-    ctx.lineTo(
-        0,
-        34
-    );
-
-
-    ctx.lineTo(
-        8,
-        43
-    );
-
-
-    ctx.lineTo(
-        16,
-        40
-    );
-
+    ctx.lineTo(16, 40);
 
     ctx.closePath();
-
 
     ctx.fill();
 
 
+    // Airline stripe
 
-    /* AIRLINE STRIPE */
-
-    ctx.fillStyle =
-        stripeColour;
+    ctx.fillStyle = stripe;
 
 
     ctx.fillRect(
         -9,
-        -4,
+        -3,
         18,
         5
     );
 
 
+    // Cockpit
 
-    /* COCKPIT */
-
-    ctx.fillStyle =
-        "#163b59";
+    ctx.fillStyle = "#193b53";
 
 
     ctx.beginPath();
@@ -1121,15 +933,35 @@ function drawAircraft(
 }
 
 
-
-/* ---------------------------
-   PLAYER AIRCRAFT
---------------------------- */
+// ============================================
+// PLAYER AIRCRAFT
+// ============================================
 
 function drawPlayer() {
 
     const airline =
         airlines[selectedPlane];
+
+
+    let scale = 1;
+
+
+    // Make Emirates A380 look larger
+
+    if (selectedPlane === "emirates") {
+
+        scale = 1.12;
+
+    }
+
+
+    // BA Dreamliner slightly slimmer
+
+    if (selectedPlane === "british") {
+
+        scale = 0.95;
+
+    }
 
 
     drawAircraft(
@@ -1142,21 +974,20 @@ function drawPlayer() {
 
         airline.tail,
 
-        airline.stripe
+        airline.stripe,
+
+        scale
 
     );
 
 }
 
 
+// ============================================
+// OTHER AIRCRAFT
+// ============================================
 
-/* ---------------------------
-   TRAFFIC AIRCRAFT
---------------------------- */
-
-function drawTrafficPlane(
-    plane
-) {
+function drawTrafficPlane(plane) {
 
     drawAircraft(
 
@@ -1168,17 +999,18 @@ function drawTrafficPlane(
 
         plane.colour,
 
-        plane.colour
+        plane.colour,
+
+        0.9
 
     );
 
 }
 
 
-
-/* ---------------------------
-   DRAW GAME
---------------------------- */
+// ============================================
+// DRAW EVERYTHING
+// ============================================
 
 function draw() {
 
@@ -1200,10 +1032,9 @@ function draw() {
 }
 
 
-
-/* ---------------------------
-   GAME LOOP
---------------------------- */
+// ============================================
+// GAME LOOP
+// ============================================
 
 function gameLoop(time) {
 
@@ -1217,13 +1048,11 @@ function gameLoop(time) {
     const dt =
         Math.min(
             0.033,
-            (time - lastTime)
-            / 1000
+            (time - lastTime) / 1000
         );
 
 
-    lastTime =
-        time;
+    lastTime = time;
 
 
     update(dt);
@@ -1248,307 +1077,5 @@ function gameLoop(time) {
 }
 
 
-
-/* INITIAL SKY */
-
-drawBackground();    max-height: 750px;
-
-    overflow: hidden;
-
-    background: #62c8f5;
-}
-
-
-/* CANVAS */
-
-#gameCanvas {
-
-    position: absolute;
-
-    width: 100%;
-    height: 100%;
-
-    top: 0;
-    left: 0;
-}
-
-
-/* SCREENS */
-
-.screen {
-
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 10;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    color: white;
-
-    padding: 30px;
-
-    background:
-        linear-gradient(
-            rgba(5, 24, 45, 0.45),
-            rgba(5, 24, 45, 0.65)
-        );
-}
-
-
-.hidden {
-    display: none !important;
-}
-
-
-/* TITLE */
-
-h1 {
-
-    margin: 0 0 10px;
-
-    font-size: clamp(
-        40px,
-        7vw,
-        75px
-    );
-
-    text-shadow:
-        0 4px 12px
-        rgba(0,0,0,.4);
-}
-
-
-.subtitle {
-
-    font-size: 21px;
-
-    margin-bottom: 28px;
-}
-
-
-/* PLANE SELECTION */
-
-#planeChoices {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 18px;
-
-    width: 100%;
-
-    margin-bottom: 30px;
-
-    flex-wrap: wrap;
-}
-
-
-.planeChoice {
-
-    width: 190px;
-    height: 150px;
-
-    border-radius: 18px;
-
-    border: 3px solid
-        rgba(255,255,255,.4);
-
-    background:
-        rgba(255,255,255,.15);
-
-    color: white;
-
-    cursor: pointer;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    transition: .2s;
-
-    backdrop-filter:
-        blur(8px);
-}
-
-
-.planeChoice:hover {
-
-    transform:
-        translateY(-5px);
-
-    background:
-        rgba(255,255,255,.25);
-}
-
-
-.planeChoice.selected {
-
-    border:
-        4px solid #ffd84d;
-
-    background:
-        rgba(255,216,77,.22);
-
-    transform:
-        translateY(-7px);
-
-    box-shadow:
-        0 8px 30px
-        rgba(0,0,0,.3);
-}
-
-
-.planeIcon {
-
-    font-size: 48px;
-
-    margin-bottom: 10px;
-}
-
-
-.planeChoice strong {
-
-    font-size: 18px;
-}
-
-
-.planeChoice small {
-
-    margin-top: 5px;
-
-    opacity: .75;
-}
-
-
-/* BUTTON */
-
-#startButton,
-#menuButton {
-
-    border: none;
-
-    padding:
-        16px 38px;
-
-    border-radius:
-        50px;
-
-    background:
-        #ffd43b;
-
-    color:
-        #16263a;
-
-    font-size:
-        18px;
-
-    font-weight:
-        bold;
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        0 6px 0
-        #b99000;
-}
-
-
-#startButton:hover,
-#menuButton:hover {
-
-    transform:
-        translateY(-2px);
-}
-
-
-#startButton:active,
-#menuButton:active {
-
-    transform:
-        translateY(4px);
-
-    box-shadow:
-        0 2px 0
-        #b99000;
-}
-
-
-.controls {
-
-    margin-top: 22px;
-
-    font-size: 14px;
-
-    opacity: .8;
-}
-
-
-/* HUD */
-
-#hud {
-
-    position: absolute;
-
-    z-index: 5;
-
-    top: 20px;
-    left: 25px;
-    right: 25px;
-
-    display: none;
-
-    justify-content:
-        space-between;
-
-    color: white;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-    text-shadow:
-        0 2px 5px
-        rgba(0,0,0,.6);
-
-    pointer-events: none;
-}
-
-
-/* MOBILE */
-
-@media (max-width: 650px) {
-
-    .planeChoice {
-
-        width: 120px;
-        height: 120px;
-
-    }
-
-    .planeIcon {
-
-        font-size: 35px;
-
-    }
-
-    .planeChoice strong {
-
-        font-size: 14px;
-
-    }
-
-}
+// Draw initial background
+drawBackground();
