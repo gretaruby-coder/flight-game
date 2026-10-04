@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Airline Pilot</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -18,74 +16,75 @@
     <!-- MAIN MENU -->
     <div id="mainMenu" class="screen">
 
-        <h1>✈️ AIRLINE PILOT</h1>
+        <div class="menuCard">
 
-        <p class="subtitle">
-            Choose your aircraft
-        </p>
+            <div class="logo">✈️</div>
 
-        <div id="planeChoices">
+            <h1>AIRLINE PILOT</h1>
 
-            <button class="planeChoice selected"
-                    data-plane="emirates">
+            <p class="subtitle">
+                Choose your aircraft
+            </p>
 
-                <span class="planeIcon">✈️</span>
+            <div id="planeChoices">
 
-                <strong>Emirates</strong>
+                <button class="planeChoice selected"
+                        data-plane="emirates">
 
-                <small>Dubai</small>
+                    <span class="planePreview emiratesPlane">✈</span>
 
+                    <strong>Emirates</strong>
+
+                    <small>Dubai</small>
+
+                </button>
+
+
+                <button class="planeChoice"
+                        data-plane="qatar">
+
+                    <span class="planePreview qatarPlane">✈</span>
+
+                    <strong>Qatar Airways</strong>
+
+                    <small>Doha</small>
+
+                </button>
+
+
+                <button class="planeChoice"
+                        data-plane="british">
+
+                    <span class="planePreview britishPlane">✈</span>
+
+                    <strong>British Airways</strong>
+
+                    <small>London</small>
+
+                </button>
+
+            </div>
+
+
+            <button id="startButton">
+                START FLIGHT
             </button>
 
-
-            <button class="planeChoice"
-                    data-plane="wizz">
-
-                <span class="planeIcon">✈️</span>
-
-                <strong>Wizz Air</strong>
-
-                <small>Budapest</small>
-
-            </button>
-
-
-            <button class="planeChoice"
-                    data-plane="british">
-
-                <span class="planeIcon">✈️</span>
-
-                <strong>British Airways</strong>
-
-                <small>London</small>
-
-            </button>
+            <p class="controls">
+                ↑ ↓ ← → or WASD to fly
+            </p>
 
         </div>
-
-
-        <button id="startButton">
-            START FLIGHT
-        </button>
-
-
-        <p class="controls">
-
-            Arrow Keys / WASD to fly
-
-        </p>
 
     </div>
 
 
     <!-- HUD -->
-
     <div id="hud">
 
         <span id="airlineName"></span>
 
         <span>
-            Distance:
             <b id="distance">0</b> km
         </span>
 
@@ -93,29 +92,34 @@
 
 
     <!-- CRASH SCREEN -->
+    <div id="crashScreen"
+         class="screen hidden">
 
-    <div id="crashScreen" class="screen hidden">
+        <div class="crashCard">
 
-        <h1>💥 CRASHED!</h1>
+            <div class="crashIcon">💥</div>
 
-        <p id="crashMessage">
-            Your aircraft crashed.
-        </p>
+            <h2>CRASHED!</h2>
 
-        <p>
-            You flew
-            <strong id="finalDistance">0</strong>
-            km
-        </p>
+            <p id="crashMessage">
+                Your aircraft crashed.
+            </p>
 
-        <button id="menuButton">
-            MAIN MENU
-        </button>
+            <p>
+                Distance flown:
+                <strong id="finalDistance">0</strong>
+                km
+            </p>
+
+            <button id="menuButton">
+                CHOOSE ANOTHER PLANE
+            </button>
+
+        </div>
 
     </div>
 
 </div>
-
 
 <script src="script.js"></script>
 
