@@ -528,13 +528,23 @@ function update(dt) {
 
     if (cloudTimer <= 0) {
 
+    // Difficulty increases every 100 km
+    const level = Math.floor(distance / 100);
+
+    // More clouds at higher levels
+const cloudAmount = Math.min(5, 1 + level);
+
+    for (let i = 0; i < cloudAmount; i++) {
         createCloud();
-
-        cloudTimer =
-            1 +
-            Math.random() * 1.2;
-
     }
+
+    // Clouds also appear more frequently
+    cloudTimer = Math.max(
+        0.45,
+        1.2 - (level * 0.1)
+    ) + Math.random() * 0.8;
+
+}
 
 
     clouds.forEach(cloud => {
@@ -552,15 +562,25 @@ function update(dt) {
     trafficTimer -= dt;
 
 
-    if (trafficTimer <= 0) {
+   if (trafficTimer <= 0) {
 
+    // Difficulty increases every 100 km
+    const level = Math.floor(distance / 100);
+
+    // More aircraft at higher levels
+    const planeAmount = Math.min(5, 1 + level);
+
+    for (let i = 0; i < planeAmount; i++) {
         createTrafficPlane();
-
-        trafficTimer =
-            1.5 +
-            Math.random() * 2;
-
     }
+
+    // Aircraft also appear more frequently
+    trafficTimer = Math.max(
+        0.7,
+        2 - (level * 0.12)
+    ) + Math.random() * 1.2;
+
+}
 
 
     traffic.forEach(plane => {
@@ -939,47 +959,22 @@ function drawAircraft(
 
 function drawPlayer() {
 
-    const airline =
-        airlines[selectedPlane];
-
-
-    let scale = 1;
-
-
-    // Make Emirates A380 look larger
+    ctx.save();
+    ctx.translate(player.x, player.y);
 
     if (selectedPlane === "emirates") {
-
-        scale = 1.12;
-
+        drawEmiratesPlayer();
     }
 
-
-    // BA Dreamliner slightly slimmer
-
-    if (selectedPlane === "british") {
-
-        scale = 0.95;
-
+    else if (selectedPlane === "qatar") {
+        drawQatarPlayer();
     }
 
+    else if (selectedPlane === "british") {
+        drawBritishPlayer();
+    }
 
-    drawAircraft(
-
-        player.x,
-
-        player.y,
-
-        airline.body,
-
-        airline.tail,
-
-        airline.stripe,
-
-        scale
-
-    );
-
+    ctx.restore();
 }
 
 
