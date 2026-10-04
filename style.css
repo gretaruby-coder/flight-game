@@ -469,3 +469,347 @@ h1 {
     }
 
 }
+
+/* ==================================
+   AIRCRAFT MENU PREVIEWS
+================================== */
+
+.aircraftPreview {
+    height: 85px;
+    width: 150px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.aircraft {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 120px;
+    height: 75px;
+    transform:
+        translate(-50%, -50%);
+}
+
+
+/* FUSELAGE */
+
+.fuselage {
+    position: absolute;
+
+    width: 16px;
+    height: 70px;
+
+    left: 52px;
+    top: 2px;
+
+    background: #f5f7fa;
+
+    border-radius:
+        60% 60% 35% 35%;
+
+    box-shadow:
+        0 2px 5px
+        rgba(0,0,0,.3);
+
+    z-index: 3;
+}
+
+
+/* MAIN WINGS */
+
+.leftWing,
+.rightWing {
+    position: absolute;
+
+    width: 52px;
+    height: 18px;
+
+    top: 34px;
+
+    background: #e5e9ed;
+
+    z-index: 2;
+}
+
+
+.leftWing {
+    left: 8px;
+
+    clip-path:
+        polygon(
+            100% 0,
+            100% 100%,
+            0 85%,
+            15% 60%
+        );
+}
+
+
+.rightWing {
+    right: 8px;
+
+    clip-path:
+        polygon(
+            0 0,
+            0 100%,
+            100% 85%,
+            85% 60%
+        );
+}
+
+
+/* REAR STABILISERS */
+
+.leftTail,
+.rightTail {
+    position: absolute;
+
+    width: 28px;
+    height: 11px;
+
+    top: 59px;
+
+    z-index: 2;
+}
+
+
+.leftTail {
+    left: 31px;
+
+    clip-path:
+        polygon(
+            100% 0,
+            100% 100%,
+            0 85%
+        );
+}
+
+
+.rightTail {
+    right: 31px;
+
+    clip-path:
+        polygon(
+            0 0,
+            0 100%,
+            100% 85%
+        );
+}
+
+
+/* TAIL FIN */
+
+.tailFin {
+    position: absolute;
+
+    width: 12px;
+    height: 23px;
+
+    left: 54px;
+    top: 50px;
+
+    z-index: 4;
+
+    clip-path:
+        polygon(
+            50% 0,
+            100% 100%,
+            0 100%
+        );
+}
+
+
+/* ==================================
+   EMIRATES A380
+================================== */
+
+.emiratesAircraft .aircraft {
+    transform:
+        translate(-50%, -50%)
+        scale(1.08);
+}
+
+.emiratesAircraft .fuselage {
+    width: 19px;
+
+    left: 50px;
+
+    background:
+        linear-gradient(
+            to right,
+            #d8dde2,
+            #ffffff,
+            #e8ebee
+        );
+}
+
+.emiratesAircraft .leftWing,
+.emiratesAircraft .rightWing {
+    height: 21px;
+
+    background: #e5e8eb;
+}
+
+.emiratesAircraft .leftTail,
+.emiratesAircraft .rightTail {
+    background: #d71920;
+}
+
+.emiratesAircraft .tailFin {
+    background: #d71920;
+}
+
+
+/* gold Emirates stripe */
+
+.emiratesAircraft .fuselage::after {
+    content: "";
+
+    position: absolute;
+
+    width: 4px;
+    height: 30px;
+
+    left: 3px;
+    top: 27px;
+
+    background: #c9a94e;
+
+    border-radius: 5px;
+}
+
+
+/* ==================================
+   QATAR 777
+================================== */
+
+.qatarAircraft .aircraft {
+    transform:
+        translate(-50%, -50%)
+        scaleY(1.08);
+}
+
+.qatarAircraft .fuselage {
+    height: 76px;
+
+    top: -3px;
+
+    background:
+        linear-gradient(
+            to right,
+            #dfe3e6,
+            #ffffff,
+            #e5e7e9
+        );
+}
+
+.qatarAircraft .leftWing,
+.qatarAircraft .rightWing {
+    top: 37px;
+
+    height: 15px;
+
+    background: #dfe3e6;
+}
+
+.qatarAircraft .leftTail,
+.qatarAircraft .rightTail,
+.qatarAircraft .tailFin {
+    background: #8a1538;
+}
+
+
+/* Qatar burgundy stripe */
+
+.qatarAircraft .fuselage::after {
+    content: "";
+
+    position: absolute;
+
+    width: 4px;
+    height: 37px;
+
+    right: 3px;
+    top: 25px;
+
+    background: #8a1538;
+
+    border-radius: 5px;
+}
+
+
+/* ==================================
+   BRITISH AIRWAYS 787
+================================== */
+
+.britishAircraft .fuselage {
+    width: 15px;
+
+    background:
+        linear-gradient(
+            to right,
+            #d9dde2,
+            white,
+            #e6e9ec
+        );
+}
+
+.britishAircraft .leftWing,
+.britishAircraft .rightWing {
+    height: 14px;
+
+    background: #dce2e7;
+}
+
+
+/* swept Dreamliner wings */
+
+.britishAircraft .leftWing {
+    transform:
+        rotate(-7deg);
+}
+
+.britishAircraft .rightWing {
+    transform:
+        rotate(7deg);
+}
+
+
+.britishAircraft .leftTail,
+.britishAircraft .rightTail {
+    background: #123f78;
+}
+
+
+.britishAircraft .tailFin {
+    background:
+        linear-gradient(
+            135deg,
+            #123f78 0%,
+            #123f78 55%,
+            #d7193f 56%,
+            #d7193f 75%,
+            white 76%
+        );
+}
+
+
+/* BA blue belly */
+
+.britishAircraft .fuselage::after {
+    content: "";
+
+    position: absolute;
+
+    width: 100%;
+    height: 22px;
+
+    bottom: 4px;
+    left: 0;
+
+    background: #123f78;
+
+    border-radius:
+        0 0 8px 8px;
+}
