@@ -31,16 +31,11 @@ body {
     );
 }
 
+/* PHONE GAME CONTROLS */
+
 #gameCanvas {
-    position: absolute;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: block;
+    touch-action: none;
 }
-
 
 /* ================================
    MENU SCREENS
@@ -812,8 +807,68 @@ h1 {
         0 0 8px 8px;
 }
 
-/* PHONE GAME CONTROLS */
+// ============================================
+// MOBILE TOUCH / DRAG CONTROLS
+// ============================================
 
-#gameCanvas {
-    touch-action: none;
+function movePlaneToTouch(event) {
+
+    if (!gameRunning) {
+        return;
+    }
+
+    event.preventDefault();
+
+    const touch = event.touches[0];
+
+    if (!touch) {
+        return;
+    }
+
+    const rect = canvas.getBoundingClientRect();
+
+    // Convert finger position to canvas coordinates
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const touchX =
+        (touch.clientX - rect.left) * scaleX;
+
+    const touchY =
+        (touch.clientY - rect.top) * scaleY;
+
+
+    // Plane follows finger
+    player.x = touchX;
+
+    // Slightly above finger so you can still see the aircraft
+    player.y = touchY - 60;
+
+
+    // Keep aircraft inside the game
+    player.x = Math.max(
+        45,
+        Math.min(canvas.width - 45, player.x)
+    );
+
+    player.y = Math.max(
+        55,
+        Math.min(canvas.height - 55, player.y)
+    );
 }
+
+
+// Finger touches screen
+canvas.addEventListener(
+    "touchstart",
+    movePlaneToTouch,
+    { passive: false }
+);
+
+
+// Finger drags across screen
+canvas.addEventListener(
+    "touchmove",
+    movePlaneToTouch,
+    { passive: false }
+);
