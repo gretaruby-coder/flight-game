@@ -977,7 +977,271 @@ function drawPlayer() {
     ctx.restore();
 }
 
+// ============================================
+// EMIRATES A380
+// ============================================
 
+function drawEmiratesPlayer() {
+
+    ctx.save();
+    ctx.scale(1.15, 1.15);
+
+    // Huge A380 wings
+    ctx.fillStyle = "#e5e9ec";
+    ctx.beginPath();
+    ctx.moveTo(-8, -8);
+    ctx.lineTo(-48, 18);
+    ctx.lineTo(-45, 27);
+    ctx.lineTo(-8, 15);
+    ctx.lineTo(8, 15);
+    ctx.lineTo(45, 27);
+    ctx.lineTo(48, 18);
+    ctx.lineTo(8, -8);
+    ctx.closePath();
+    ctx.fill();
+
+    // Four engines
+    ctx.fillStyle = "#cbd2d7";
+
+    ctx.beginPath();
+    ctx.ellipse(-29, 15, 5, 9, 0, 0, Math.PI * 2);
+    ctx.ellipse(-15, 11, 5, 9, 0, 0, Math.PI * 2);
+    ctx.ellipse(15, 11, 5, 9, 0, 0, Math.PI * 2);
+    ctx.ellipse(29, 15, 5, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Fuselage
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 11, 42, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Nose
+    ctx.beginPath();
+    ctx.moveTo(0, -52);
+    ctx.lineTo(-10, -25);
+    ctx.lineTo(10, -25);
+    ctx.closePath();
+    ctx.fill();
+
+    // Emirates gold stripe
+    ctx.fillStyle = "#c8a951";
+    ctx.fillRect(-7, -13, 4, 38);
+
+    // Red tail wings
+    ctx.fillStyle = "#d71920";
+
+    ctx.beginPath();
+    ctx.moveTo(0, 25);
+    ctx.lineTo(-22, 40);
+    ctx.lineTo(-8, 42);
+    ctx.lineTo(0, 34);
+    ctx.lineTo(8, 42);
+    ctx.lineTo(22, 40);
+    ctx.closePath();
+    ctx.fill();
+
+    // Vertical tail
+    ctx.beginPath();
+    ctx.moveTo(0, 19);
+    ctx.lineTo(-6, 43);
+    ctx.lineTo(6, 43);
+    ctx.closePath();
+    ctx.fill();
+
+    // Cockpit
+    ctx.fillStyle = "#17374b";
+    ctx.beginPath();
+    ctx.ellipse(0, -29, 5, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+
+
+// ============================================
+// QATAR AIRWAYS 777
+// ============================================
+
+function drawQatarPlayer() {
+
+    ctx.save();
+
+    // Long swept wings
+    ctx.fillStyle = "#e5e9ec";
+
+    ctx.beginPath();
+    ctx.moveTo(-7, -5);
+    ctx.lineTo(-44, 20);
+    ctx.lineTo(-39, 25);
+    ctx.lineTo(-6, 14);
+    ctx.lineTo(6, 14);
+    ctx.lineTo(39, 25);
+    ctx.lineTo(44, 20);
+    ctx.lineTo(7, -5);
+    ctx.closePath();
+    ctx.fill();
+
+    // Two large 777 engines
+    ctx.fillStyle = "#d4d8dc";
+
+    ctx.beginPath();
+    ctx.ellipse(-22, 16, 7, 10, 0, 0, Math.PI * 2);
+    ctx.ellipse(22, 16, 7, 10, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Engine centres
+    ctx.fillStyle = "#596773";
+
+    ctx.beginPath();
+    ctx.ellipse(-22, 13, 3, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(22, 13, 3, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Long fuselage
+    ctx.fillStyle = "#ffffff";
+
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 9, 45, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Nose
+    ctx.beginPath();
+    ctx.moveTo(0, -53);
+    ctx.lineTo(-9, -25);
+    ctx.lineTo(9, -25);
+    ctx.closePath();
+    ctx.fill();
+
+    // Qatar burgundy stripe
+    ctx.fillStyle = "#8a1538";
+    ctx.fillRect(3, -10, 4, 38);
+
+    // Tail
+    ctx.beginPath();
+    ctx.moveTo(0, 27);
+    ctx.lineTo(-19, 41);
+    ctx.lineTo(-7, 42);
+    ctx.lineTo(0, 35);
+    ctx.lineTo(7, 42);
+    ctx.lineTo(19, 41);
+    ctx.closePath();
+    ctx.fill();
+
+    // Tail fin
+    ctx.beginPath();
+    ctx.moveTo(0, 18);
+    ctx.lineTo(-6, 44);
+    ctx.lineTo(6, 44);
+    ctx.closePath();
+    ctx.fill();
+
+    // Cockpit
+    ctx.fillStyle = "#17374b";
+
+    ctx.beginPath();
+    ctx.ellipse(0, -31, 4.5, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+
+
+// ============================================
+// BRITISH AIRWAYS 787
+// ============================================
+
+function drawBritishPlayer() {
+
+    ctx.save();
+    ctx.scale(0.98, 0.98);
+
+    // Swept Dreamliner wings
+    ctx.fillStyle = "#e4e9ed";
+
+    ctx.beginPath();
+    ctx.moveTo(-6, -6);
+
+    ctx.lineTo(-48, 18);
+    ctx.lineTo(-43, 23);
+    ctx.lineTo(-20, 18);
+    ctx.lineTo(-6, 12);
+
+    ctx.lineTo(6, 12);
+
+    ctx.lineTo(20, 18);
+    ctx.lineTo(43, 23);
+    ctx.lineTo(48, 18);
+
+    ctx.lineTo(6, -6);
+
+    ctx.closePath();
+    ctx.fill();
+
+    // Two engines
+    ctx.fillStyle = "#123f78";
+
+    ctx.beginPath();
+    ctx.ellipse(-22, 14, 6, 9, 0, 0, Math.PI * 2);
+    ctx.ellipse(22, 14, 6, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // White fuselage
+    ctx.fillStyle = "#ffffff";
+
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 9, 42, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Nose
+    ctx.beginPath();
+    ctx.moveTo(0, -50);
+    ctx.lineTo(-9, -24);
+    ctx.lineTo(9, -24);
+    ctx.closePath();
+    ctx.fill();
+
+    // BA blue lower/rear fuselage
+    ctx.fillStyle = "#123f78";
+
+    ctx.beginPath();
+    ctx.moveTo(-8, 10);
+    ctx.lineTo(8, 10);
+    ctx.lineTo(7, 38);
+    ctx.lineTo(-7, 38);
+    ctx.closePath();
+    ctx.fill();
+
+    // Blue tail
+    ctx.beginPath();
+    ctx.moveTo(0, 24);
+    ctx.lineTo(-19, 40);
+    ctx.lineTo(-7, 42);
+    ctx.lineTo(0, 34);
+    ctx.lineTo(7, 42);
+    ctx.lineTo(19, 40);
+    ctx.closePath();
+    ctx.fill();
+
+    // BA red tail accent
+    ctx.fillStyle = "#d7193f";
+
+    ctx.beginPath();
+    ctx.moveTo(-5, 39);
+    ctx.lineTo(6, 27);
+    ctx.lineTo(4, 42);
+    ctx.closePath();
+    ctx.fill();
+
+    // Cockpit
+    ctx.fillStyle = "#17374b";
+
+    ctx.beginPath();
+    ctx.ellipse(0, -28, 4.5, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
 // ============================================
 // OTHER AIRCRAFT
 // ============================================
