@@ -198,6 +198,87 @@ document.addEventListener("keyup", function (event) {
 
 });
 
+// ============================================
+// PHONE / TOUCH CONTROLS
+// ============================================
+
+let touchActive = false;
+let lastTouchX = 0;
+let lastTouchY = 0;
+
+
+// Finger touches the game
+canvas.addEventListener("touchstart", function(event) {
+
+    if (!gameRunning) return;
+
+    event.preventDefault();
+
+    const touch = event.touches[0];
+
+    touchActive = true;
+
+    lastTouchX = touch.clientX;
+    lastTouchY = touch.clientY;
+
+}, { passive: false });
+
+
+// Finger moves / swipes
+canvas.addEventListener("touchmove", function(event) {
+
+    if (!gameRunning || !touchActive) return;
+
+    event.preventDefault();
+
+    const touch = event.touches[0];
+
+    // Work out how far the finger moved
+    const deltaX = touch.clientX - lastTouchX;
+    const deltaY = touch.clientY - lastTouchY;
+
+
+    // Move aircraft by the same amount
+    player.x += deltaX;
+    player.y += deltaY;
+
+
+    // Keep aircraft inside screen
+    player.x = Math.max(
+        45,
+        Math.min(width - 45, player.x)
+    );
+
+    player.y = Math.max(
+        55,
+        Math.min(height - 55, player.y)
+    );
+
+
+    // Remember finger position
+    lastTouchX = touch.clientX;
+    lastTouchY = touch.clientY;
+
+}, { passive: false });
+
+
+// Finger released
+canvas.addEventListener("touchend", function(event) {
+
+    if (!gameRunning) return;
+
+    event.preventDefault();
+
+    touchActive = false;
+
+}, { passive: false });
+
+
+canvas.addEventListener("touchcancel", function() {
+
+    touchActive = false;
+
+});
 
 // ============================================
 // START GAME
