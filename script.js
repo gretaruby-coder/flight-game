@@ -707,6 +707,7 @@ function createPlaneSelector() {
 
 }
 
+document.getElementById("startBtn").addEventListener("click", startGame);
 
 createPlaneSelector();
 
