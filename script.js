@@ -609,32 +609,25 @@ function update(dt) {
 
     if (cloudTimer <= 0) {
 
-    // Difficulty increases every 100 km
     const level = Math.floor(distance / 100);
 
-    // More clouds at higher levels
-const cloudAmount = Math.min(5, 1 + level);
+    // Mostly one cloud at a time.
+    // Only starts occasionally adding a second after 200.
+    let cloudAmount = 1;
+
+    if (level >= 2 && Math.random() < 0.35) {
+        cloudAmount = 2;
+    }
 
     for (let i = 0; i < cloudAmount; i++) {
         createCloud();
     }
 
-    // Clouds also appear more frequently
-    cloudTimer = Math.max(
-        0.45,
-        1.2 - (level * 0.1)
-    ) + Math.random() * 0.8;
-
+    // Very gradual increase in frequency
+    cloudTimer =
+        Math.max(0.9, 1.6 - (level * 0.08))
+        + Math.random() * 1.2;
 }
-
-
-    clouds.forEach(cloud => {
-
-        cloud.y +=
-            cloud.speed * dt;
-
-    });
-
 
     // ----------------
     // OTHER PLANES
@@ -643,34 +636,27 @@ const cloudAmount = Math.min(5, 1 + level);
     trafficTimer -= dt;
 
 
-   if (trafficTimer <= 0) {
+  if (trafficTimer <= 0) {
 
-    // Difficulty increases every 100 km
     const level = Math.floor(distance / 100);
 
-    // More aircraft at higher levels
-    const planeAmount = Math.min(5, 1 + level);
+    // Normally only one aircraft.
+    // Small chance of two once you've flown further.
+    let planeAmount = 1;
+
+    if (level >= 3 && Math.random() < 0.25) {
+        planeAmount = 2;
+    }
 
     for (let i = 0; i < planeAmount; i++) {
         createTrafficPlane();
     }
 
-    // Aircraft also appear more frequently
-    trafficTimer = Math.max(
-        0.7,
-        2 - (level * 0.12)
-    ) + Math.random() * 1.2;
-
+    // Traffic gets busier slowly rather than suddenly
+    trafficTimer =
+        Math.max(1.2, 2.4 - (level * 0.1))
+        + Math.random() * 1.5;
 }
-
-
-    traffic.forEach(plane => {
-
-        plane.y +=
-            plane.speed * dt;
-
-    });
-
 
     // ----------------
     // CLOUD COLLISION
