@@ -813,3 +813,9 @@ h1 {
     border-radius:
         0 0 8px 8px;
 }
+
+/* PHONE GAME CONTROLS */
+
+#gameCanvas {
+    touch-action: none;
+}
