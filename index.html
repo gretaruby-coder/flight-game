@@ -1,31 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plane Crash</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Airline Pilot</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div id="gameWrap">
-  <canvas id="game"></canvas>
+<div id="gameContainer">
 
-  <div id="hud">
-    <div>✈️ SKY ACE</div>
-    <div>Score: <span id="score">0</span></div>
-    <div>❤️ <span id="lives">3</span></div>
-    <div>🏆 <span id="highScore">0</span></div>
-  </div>
+    <canvas id="gameCanvas"></canvas>
 
-  <div id="message">
-    <h1>✈️PLANE CRASH</h1>
-    <p>Choose any plane, fly it and crash it.</p>
-    <p>Move: WASD / Arrow Keys • Shoot: Space</p>
-    <button id="startBtn">START GAME</button>
-  </div>
+    <!-- MAIN MENU -->
+    <div id="mainMenu" class="screen">
+
+        <h1>✈️ AIRLINE PILOT</h1>
+
+        <p class="subtitle">
+            Choose your aircraft
+        </p>
+
+        <div id="planeChoices">
+
+            <button class="planeChoice selected"
+                    data-plane="emirates">
+
+                <span class="planeIcon">✈️</span>
+
+                <strong>Emirates</strong>
+
+                <small>Dubai</small>
+
+            </button>
+
+
+            <button class="planeChoice"
+                    data-plane="wizz">
+
+                <span class="planeIcon">✈️</span>
+
+                <strong>Wizz Air</strong>
+
+                <small>Budapest</small>
+
+            </button>
+
+
+            <button class="planeChoice"
+                    data-plane="british">
+
+                <span class="planeIcon">✈️</span>
+
+                <strong>British Airways</strong>
+
+                <small>London</small>
+
+            </button>
+
+        </div>
+
+
+        <button id="startButton">
+            START FLIGHT
+        </button>
+
+
+        <p class="controls">
+
+            Arrow Keys / WASD to fly
+
+        </p>
+
+    </div>
+
+
+    <!-- HUD -->
+
+    <div id="hud">
+
+        <span id="airlineName"></span>
+
+        <span>
+            Distance:
+            <b id="distance">0</b> km
+        </span>
+
+    </div>
+
+
+    <!-- CRASH SCREEN -->
+
+    <div id="crashScreen" class="screen hidden">
+
+        <h1>💥 CRASHED!</h1>
+
+        <p id="crashMessage">
+            Your aircraft crashed.
+        </p>
+
+        <p>
+            You flew
+            <strong id="finalDistance">0</strong>
+            km
+        </p>
+
+        <button id="menuButton">
+            MAIN MENU
+        </button>
+
+    </div>
+
 </div>
 
+
 <script src="script.js"></script>
+
 </body>
 </html>
