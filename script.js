@@ -69,42 +69,27 @@ const keys = {};
 const airlines = {
 
     emirates: {
+const airlines = {
 
+    emirates: {
         name: "Emirates",
-
         body: "#ffffff",
-
         tail: "#d71920",
-
         stripe: "#c8a951"
-
     },
 
-
-   qatar: {
-
-    name: "Qatar Airways",
-
-    body: "#ffffff",
-
-    tail: "#8a1538",
-
-    stripe: "#8a1538"
-
-},
-
+    qatar: {
+        name: "Qatar Airways",
+        body: "#ffffff",
+        tail: "#8a1538",
+        stripe: "#8a1538"
+    },
 
     british: {
-
-        name:
-            "British Airways",
-
+        name: "British Airways",
         body: "#ffffff",
-
         tail: "#123f78",
-
         stripe: "#d7193f"
-
     }
 
 };
