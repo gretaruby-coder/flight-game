@@ -198,6 +198,8 @@ planeChoices.forEach((button) => {
         console.log("Selected plane:", selectedPlane);
     });
 
+});
+
 
 /* ---------------------------
    KEYBOARD
