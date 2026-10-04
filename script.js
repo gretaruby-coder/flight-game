@@ -81,17 +81,17 @@ const airlines = {
     },
 
 
-    wizz: {
+   qatar: {
 
-        name: "Wizz Air",
+    name: "Qatar Airways",
 
-        body: "#ffffff",
+    body: "#ffffff",
 
-        tail: "#d0008f",
+    tail: "#8a1538",
 
-        stripe: "#e91e9d"
+    stripe: "#8a1538"
 
-    },
+},
 
 
     british: {
